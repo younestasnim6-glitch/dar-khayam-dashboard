@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import mysql.connector
 import plotly.express as px
+from db import get_connection
 
 st.set_page_config(page_title="Restauration — Dar Khayam", page_icon="🍽️", layout="wide")
 
@@ -15,8 +15,7 @@ st.markdown("""
     }
     .dept-header {
         background: linear-gradient(135deg, #7b2d00 0%, #c0392b 100%);
-        padding: 1.2rem 2rem; border-radius: 12px;
-        margin-bottom: 1.5rem;
+        padding: 1.2rem 2rem; border-radius: 12px; margin-bottom: 1.5rem;
     }
     .dept-header h2 { color: white !important; margin: 0; font-size: 1.5rem; }
     .dept-header p  { color: #f5b7b1; margin: 0.2rem 0 0; font-size: 0.85rem; }
@@ -30,28 +29,21 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Données ──────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    conn = mysql.connector.connect(
-        host="localhost", user="root",
-        password="Tasnimyns3*", database="hotel_dashboard"
-    )
+    conn = get_connection()
     df = pd.read_sql("SELECT * FROM couts_fb", conn)
     conn.close()
     return df
 
 df = load_data()
 
-# ── KPI calculs ──────────────────────────────────────────────────────
 df["total_achats"]    = df["achats_nourriture"] + df["achats_boissons"]
 df["food_cost_%"]     = (df["achats_nourriture"] / df["chiffre_affaires"]) * 100
 df["beverage_cost_%"] = (df["achats_boissons"]   / df["chiffre_affaires"]) * 100
-df["total_cost_%"]    = (df["total_achats"]       / df["chiffre_affaires"]) * 100
 df["marge_brute"]     = df["chiffre_affaires"] - df["total_achats"]
 df["profit_%"]        = (df["marge_brute"]        / df["chiffre_affaires"]) * 100
 
-# ── Sidebar ──────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### 🍽️ Restauration")
     st.markdown("---")
@@ -59,23 +51,19 @@ with st.sidebar:
 
 df_f = df[df["mois"].isin(mois)]
 
-# ── KPI cards ────────────────────────────────────────────────────────
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("💰 CA Total",           f"{df_f['chiffre_affaires'].sum():,.0f} TND")
-c2.metric("🍽️ Food Cost moyen",    f"{df_f['food_cost_%'].mean():.2f} %")
+c1.metric("💰 CA Total",            f"{df_f['chiffre_affaires'].sum():,.0f} TND")
+c2.metric("🍽️ Food Cost moyen",     f"{df_f['food_cost_%'].mean():.2f} %")
 c3.metric("🍹 Beverage Cost moyen", f"{df_f['beverage_cost_%'].mean():.2f} %")
-c4.metric("📊 Profit moyen",       f"{df_f['profit_%'].mean():.2f} %")
+c4.metric("📊 Profit moyen",        f"{df_f['profit_%'].mean():.2f} %")
 
-# ── Alertes ──────────────────────────────────────────────────────────
 st.markdown("---")
 if df_f["food_cost_%"].mean() > 35:
-    st.error("⚠️ Food Cost trop élevé (> 35%) — action corrective recommandée")
+    st.error("⚠️ Food Cost trop élevé (> 35%)")
 else:
     st.success("✅ Food Cost sous contrôle (< 35%)")
 
-# ── Graphiques ───────────────────────────────────────────────────────
 col_a, col_b = st.columns(2)
-
 with col_a:
     st.subheader("📈 Chiffre d'affaires mensuel")
     fig1 = px.line(df_f, x="mois", y="chiffre_affaires", markers=True,
@@ -91,7 +79,6 @@ with col_b:
     st.plotly_chart(fig2, use_container_width=True)
 
 col_c, col_d = st.columns(2)
-
 with col_c:
     st.subheader("💰 Marge brute mensuelle")
     fig3 = px.bar(df_f, x="mois", y="marge_brute",
