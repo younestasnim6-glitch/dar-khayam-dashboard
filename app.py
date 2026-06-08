@@ -68,9 +68,6 @@ page = st.selectbox("Navigation", [
     "Énergie"
 ])
 
-# ─────────────────────────────
-# ROUTING
-# ─────────────────────────────
 if page == "Accueil":
 
     st.markdown("""
@@ -83,28 +80,29 @@ if page == "Accueil":
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.info("🛏️ **Hébergement**\n\nOccupation, ADR, RevPAR, nuitées")
+        st.info("🛏️ Hébergement")
 
     with col2:
-        st.info("🍽️ **Restauration**\n\nFood cost, marge, CA F&B")
+        st.info("🍽️ Restauration")
 
     with col3:
-        st.info("👥 **Ressources humaines**\n\nMasse salariale, productivité")
+        st.info("👥 Ressources humaines")
 
     with col4:
-        st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts")
+        st.info("⚡ Énergie")
 
 elif page == "Hébergement":
-    st.switch_page("pages/1_Hebergement.py")
+    st.warning("➡ Accédez au dashboard Hébergement (page séparée ou à intégrer ici)")
 
 elif page == "Restauration":
-    st.switch_page("pages/2_Restauration.py")
+    st.warning("➡ Accédez au dashboard Restauration")
 
 elif page == "Ressources humaines":
-    st.switch_page("pages/3_Ressources_Humaines.py")
+    st.warning("➡ Accédez au dashboard RH")
 
 elif page == "Énergie":
-    st.switch_page("pages/4_Energie.py")
+    st.warning("➡ Accédez au dashboard Énergie")
+    
 
 # ─────────────────────────────
 # FOOTER
