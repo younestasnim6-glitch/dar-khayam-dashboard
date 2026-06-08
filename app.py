@@ -1,89 +1,107 @@
 import streamlit as st
 import mysql.connector
 
+# ── CONFIG ─────────────────────────────
 st.set_page_config(
-    page_title="Dar Khayam — Dashboard",
+    page_title="Dar Khayam — Dashboard KPI",
     page_icon="🏨",
     layout="wide"
 )
 
-try:
-    conn = mysql.connector.connect(
-        host=st.secrets["mysql"]["host"],
-        user=st.secrets["mysql"]["user"],
-        password=st.secrets["mysql"]["password"],
-        database=st.secrets["mysql"]["database"],
-        port=int(st.secrets["mysql"]["port"]),
-        connection_timeout=10,
-        ssl_disabled=True
-    )
-    cursor = conn.cursor()
+# ── CONNEXION MYSQL ────────────────────
+@st.cache_resource
+def get_connection():
+    try:
+        conn = mysql.connector.connect(
+            host=st.secrets["mysql"]["host"],
+            user=st.secrets["mysql"]["user"],
+            password=st.secrets["mysql"]["password"],
+            database=st.secrets["mysql"]["database"],
+            port=int(st.secrets["mysql"]["port"]),
+            connection_timeout=10
+        )
+        return conn
+    except Exception as e:
+        st.error(f"Erreur MySQL ❌ : {e}")
+        st.stop()
 
-except Exception as e:
-    st.error(f"Erreur MySQL ❌ : {e}")
-    st.stop()
-    
-# ── CSS global partagé ──────────────────────────────────────────────
+conn = get_connection()
+cursor = conn.cursor()
+
+# ── CSS (version TOPBAR + DESIGN PRO) ─────────────────────────────
 st.markdown("""
 <style>
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #0f2744;
+    .stApp { background-color: #f7f9fc; }
+
+    [data-testid="stSidebar"] { display: none !important; }
+
+    .topbar {
+        background: white;
+        border-bottom: 2px solid #e8f0fe;
+        padding: 0.75rem 2rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
     }
-    [data-testid="stSidebar"] * {
-        color: #e8f0fe !important;
+
+    .topbar-logo {
+        font-weight: 800;
+        color: #E65100;
     }
-    [data-testid="stSidebar"] .stSelectbox label,
-    [data-testid="stSidebar"] .stMultiSelect label {
-        color: #93b4d8 !important;
-        font-size: 0.8rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+
+    .nav-link {
+        padding: 6px 14px;
+        border-radius: 20px;
+        background: #fff3e0;
+        color: #E65100 !important;
+        text-decoration: none;
     }
-    /* Metric cards */
-    [data-testid="metric-container"] {
-        background: #f8fafd;
-        border: 1px solid #e2eaf4;
-        border-radius: 10px;
-        padding: 16px !important;
-    }
-    /* Header */
-    .main-header {
-        background: linear-gradient(135deg, #0f2744 0%, #1a4a8a 100%);
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        margin-bottom: 1.5rem;
+
+    .hero {
+        background: linear-gradient(135deg, #1565C0, #E65100);
+        padding: 2.5rem;
+        border-radius: 20px;
         color: white;
+        margin-top: 1rem;
     }
-    .main-header h1 { color: white !important; margin: 0; font-size: 1.8rem; }
-    .main-header p  { color: #93b4d8; margin: 0.3rem 0 0; font-size: 0.95rem; }
+
+    [data-testid="metric-container"] {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        border: 1px solid #e8f0fe;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Page d'accueil ───────────────────────────────────────────────────
+# ── TOPBAR ─────────────────────────────
 st.markdown("""
-<div class="main-header">
-    <h1>🏨 Hôtel Dar Khayam</h1>
-    <p>Tableau de bord KPI — Sélectionnez un département dans la barre de navigation à gauche</p>
+<div class="topbar">
+    <div class="topbar-logo">🏨 DAR KHAYAM</div>
+    <a class="nav-link" href="/1_Hebergement">Hébergement</a>
+    <a class="nav-link" href="/2_Restauration">Restauration</a>
+    <a class="nav-link" href="/3_RH">RH</a>
+    <a class="nav-link" href="/4_Energie">Énergie</a>
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2, col3, col4, col5 = st.columns(5)
+# ── HERO ───────────────────────────────
+st.markdown("""
+<div class="hero">
+    <h1>Tableau de bord KPI</h1>
+    <p>Hôtel Dar Khayam — Hammamet Nord</p>
+</div>
+""", unsafe_allow_html=True)
 
-with col1:
-    st.info("🛏️ **Hébergement**\n\nTaux d'occupation, ADR, RevPAR, nuitées")
-with col2:
-    st.info("🍽️ **Restauration**\n\nFood cost, marge brute, CA F&B")
-with col3:
-    st.info("👥 **Ressources Humaines**\n\nMasse salariale, productivité, saisonnalité")
-with col4:
-    st.info("📈 **Chiffre d'affaires**\n\nCA global, évolution, analyse mensuelle")
-with col5:
-    st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts STEG/SONEDE")
+# ── KPI EXEMPLE (tu peux remplacer par MySQL plus tard)
+c1, c2, c3 = st.columns(3)
+
+c1.metric("💰 CA Total", "8 935 578 DT")
+c2.metric("🛏️ Nuitées", "55 933")
+c3.metric("📊 Occupation", "54.2 %")
 
 st.markdown("---")
-st.caption("Projet de Fin d'Études — Dashboard KPI Informatisé | Hôtel Dar Khayam | 2024-2025")
-
+st.caption("PFE Dashboard - Dar Khayam")
            
            
 
