@@ -7,23 +7,21 @@ st.set_page_config(
     layout="wide"
 )
 
-@st.cache_resource
-def get_connection():
-    return mysql.connector.connect(
+try:
+    conn = mysql.connector.connect(
         host=st.secrets["mysql"]["host"],
         user=st.secrets["mysql"]["user"],
         password=st.secrets["mysql"]["password"],
         database=st.secrets["mysql"]["database"],
-        port=int(st.secrets["mysql"]["port"])
+        port=int(st.secrets["mysql"]["port"]),
+        connection_timeout=10,
+        ssl_disabled=True
     )
-
-try:
-    conn = get_connection()
     cursor = conn.cursor()
+
 except Exception as e:
-    st.error("Erreur de connexion MySQL ❌")
+    st.error(f"Erreur MySQL ❌ : {e}")
     st.stop()
-    
     
 # ── CSS global partagé ──────────────────────────────────────────────
 st.markdown("""
