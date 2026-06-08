@@ -35,18 +35,19 @@ st.markdown("""
 @st.cache_data
 def load_data():
     conn = mysql.connector.connect(
-        host="localhost", user="root",
-        password="Tasnimyns3*", database="hotel_dashboard"
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"],
+        port=int(st.secrets["mysql"]["port"]),
+        ssl_disabled=True
     )
+
     df = pd.read_sql("SELECT * FROM performance_hotel", conn)
     conn.close()
     return df
 
 df = load_data()
-
-for col in ["nuitees", "capacite_mensuelle", "nombre_sejours", "chiffre_affaires"]:
-    df[col] = pd.to_numeric(df[col], errors="coerce")
-
 # ── KPI calculs ──────────────────────────────────────────────────────
 df["taux_occupation"]      = (df["nuitees"] / df["capacite_mensuelle"]) * 100
 df["ADR"]                  = df["chiffre_affaires"].div(df["nuitees"].replace(0, pd.NA))
