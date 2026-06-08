@@ -26,37 +26,70 @@ except Exception as e:
 # ── CSS global partagé ──────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #0f2744;
-    }
-    [data-testid="stSidebar"] * {
-        color: #e8f0fe !important;
-    }
-    [data-testid="stSidebar"] .stSelectbox label,
-    [data-testid="stSidebar"] .stMultiSelect label {
-        color: #93b4d8 !important;
-        font-size: 0.8rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    /* Metric cards */
-    [data-testid="metric-container"] {
-        background: #f8fafd;
-        border: 1px solid #e2eaf4;
-        border-radius: 10px;
-        padding: 16px !important;
-    }
-    /* Header */
-    .main-header {
-        background: linear-gradient(135deg, #0f2744 0%, #1a4a8a 100%);
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        margin-bottom: 1.5rem;
-        color: white;
-    }
-    .main-header h1 { color: white !important; margin: 0; font-size: 1.8rem; }
-    .main-header p  { color: #93b4d8; margin: 0.3rem 0 0; font-size: 0.95rem; }
+
+/* ================= SIDEBAR ================= */
+[data-testid="stSidebar"] {
+    background-color: #111827;
+}
+
+[data-testid="stSidebar"] * {
+    color: #e5e7eb !important;
+}
+
+/* Labels sidebar */
+[data-testid="stSidebar"] .stSelectbox label,
+[data-testid="stSidebar"] .stMultiSelect label {
+    color: #9ca3af !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+}
+
+/* ================= HEADER ================= */
+.main-header {
+    background: linear-gradient(135deg, #0D47A1, #1976D2);
+    padding: 1.8rem 2rem;
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    color: white !important;
+}
+
+.main-header p {
+    margin-top: 0.3rem;
+    color: #dbeafe;
+}
+
+/* ================= KPI CARDS ================= */
+[data-testid="metric-container"] {
+    background: white;
+    border-radius: 14px;
+    padding: 18px !important;
+    border-top: 4px solid #E65100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: 0.2s ease-in-out;
+}
+
+[data-testid="metric-container"]:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= INFO BOXES ================= */
+div[data-testid="stInfo"] {
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+/* ================= GLOBAL ================= */
+body {
+    background-color: #f5f7fb;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -71,7 +104,7 @@ st.markdown("""
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
-    st.info("🛏️ **Hébergement**\n\nTaux d'occupation, ADR, RevPAR, nuitées")
+    st.info("🛏️ **Hébergement**\n\nTaux d'occupation • ADR • RevPAR • Nuitées")
 with col2:
     st.info("🍽️ **Restauration**\n\nFood cost, marge brute, CA F&B")
 with col3:
@@ -81,7 +114,13 @@ with col4:
 with col5:
     st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts STEG/SONEDE")
 
-st.markdown("---")
+st.markdown("""
+<style>
+div.block-container {
+    padding-top: 1rem;
+}
+</style>
+""", unsafe_allow_html=True)
 st.caption("Projet de Fin d'Études — Dashboard KPI Informatisé | Hôtel Dar Khayam | 2024-2025")
            
 
