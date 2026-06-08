@@ -4,9 +4,7 @@ import mysql.connector
 import plotly.express as px
 
 st.set_page_config(page_title="Ressources Humaines — Dar Khayam", page_icon="👥", layout="wide")
-# ── 2. FONCTIONS UTILITAIRES ───────────────────
-def format_money(x):
-    return f"{x:,.2f}".replace(",", " ").replace(".", ",") + " DT"
+
 
 
 st.markdown("""
@@ -85,8 +83,14 @@ c1.metric(
     "💰 Chiffre d'affaires",
     f"{total_ca:,.0f}".replace(",", " ") + " DT"
 )
-c2.metric("💼 Masse salariale",    f"{df_f['masse_salariale'].sum():.0f} DT")
-c3.metric("👤 Productivité moy.", f"{df_f['productivite_par_employe'].mean(): .2f} DT")
+c2.metric(
+    "💼 Masse salariale",
+    f"{df_f['masse_salariale'].sum():,.2f}".replace(",", " ").replace(".", ",") + " DT"
+)
+c3.metric(
+    "👤 Productivité moy.",
+    f"{df_f['productivite_par_employe'].mean():,.2f}".replace(",", " ").replace(".", ",") + " DT"
+)
 c4.metric("📊 Coût salarial %",    f"{df_f['cout_salarial_pct'].mean(): .2f} %")
 
 st.markdown("---")
