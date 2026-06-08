@@ -64,7 +64,12 @@ df_f = df[df["mois"].isin(mois)]
 
 # ── KPI cards ────────────────────────────────────────────────────────
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("💰 Chiffre d'affaires",  f"{df_f['chiffre_affaires'].sum():,.0f} DT")
+total_ca = df_f["chiffre_affaires"].sum()
+
+c1.metric(
+    "💰 Chiffre d'affaires",
+    f"{total_ca:,.0f}".replace(",", " ") + " DT"
+)
 c2.metric("🛏️ Nuitées",             f"{df_f['nuitees'].sum():,.0f}")
 c3.metric("💵 ADR moyen",           f"{df_f['ADR'].mean():,.2f} DT")
 c4.metric("📊 Taux d'occupation",   f"{df_f['taux_occupation'].mean():,.2f} %")
