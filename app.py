@@ -124,32 +124,29 @@ section[data-testid="stSidebarNav"] {
 .dept-header p { color: #93b4d8; margin: 0.3rem 0 0; font-size: 0.88rem; }
 </style>
 """
+ page = st.selectbox("Navigation", [
+    "Accueil",
+    "Hébergement",
+    "Restauration",
+    "Ressources humaines",
+    "Énergie"
+])
+if page == "Accueil":
+    st.title("🏨 Dashboard Dar Khayam")
+
+elif page == "Hébergement":
+    st.switch_page("pages/1_Hebergement.py")
+
+elif page == "Restauration":
+    st.switch_page("pages/2_Restauration.py")
+
+elif page == "Ressources humaines":
+    st.switch_page("pages/3_Ressources_Humaines.py")
+
+elif page == "Énergie":
+    st.switch_page("pages/4_Energie.py")
  
-NAVBAR_HTML = """
-<div class="dk-navbar">
-    <a href="/" class="dk-brand" target="_self">
-        <div class="dk-logo-box">🏨</div>
-        <div>
-            <span class="dk-brand-name">Dar Khayam</span>
-            <span class="dk-brand-sub">Tableau de bord KPI</span>
-        </div>
-    </a>
-    <nav class="dk-nav">
-        <a href="/" class="nav-item active" target="_self">🏠 Accueil</a>
-        <a href="/1_Hebergement" class="nav-item" target="_self">🛏️ Hébergement</a>
-        <a href="/2_Restauration" class="nav-item" target="_self">🍽️ Restauration</a>
-        <a href="/3_Ressources_Humaines" class="nav-item" target="_self">👥 Ressources humaines</a>
-        <a href="/4_Energie" class="nav-item" target="_self">⚡ Énergie</a>
-    </nav>
-    <div class="dk-user">
-        <span>📅 2024-2025</span>
-        <div class="dk-avatar">DK</div>
-    </div>
-</div>
-"""
- 
-st.markdown(NAVBAR_CSS + NAVBAR_HTML, unsafe_allow_html=True)
- 
+
 # ── Contenu de la page d'accueil ──
 st.markdown("""
 <div class="dept-header">
