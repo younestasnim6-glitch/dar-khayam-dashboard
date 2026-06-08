@@ -1,12 +1,18 @@
 import streamlit as st
 import mysql.connector
 
+# ─────────────────────────────────────────────
+# CONFIG PAGE
+# ─────────────────────────────────────────────
 st.set_page_config(
     page_title="Dar Khayam — Dashboard",
     page_icon="🏨",
     layout="wide"
 )
 
+# ─────────────────────────────────────────────
+# CONNEXION MYSQL
+# ─────────────────────────────────────────────
 try:
     conn = mysql.connector.connect(
         host=st.secrets["mysql"]["host"],
@@ -22,12 +28,19 @@ try:
 except Exception as e:
     st.error(f"Erreur MySQL ❌ : {e}")
     st.stop()
-    
-# ── CSS global partagé ──────────────────────────────────────────────
+
+# ─────────────────────────────────────────────
+# CSS GLOBAL (VERSION PRO)
+# ─────────────────────────────────────────────
 st.markdown("""
 <style>
 
-/* ================= SIDEBAR ================= */
+/* BODY */
+body {
+    background-color: #f5f7fb;
+}
+
+/* SIDEBAR */
 [data-testid="stSidebar"] {
     background-color: #111827;
 }
@@ -36,7 +49,6 @@ st.markdown("""
     color: #e5e7eb !important;
 }
 
-/* Labels sidebar */
 [data-testid="stSidebar"] .stSelectbox label,
 [data-testid="stSidebar"] .stMultiSelect label {
     color: #9ca3af !important;
@@ -44,7 +56,7 @@ st.markdown("""
     text-transform: uppercase;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 .main-header {
     background: linear-gradient(135deg, #0D47A1, #1976D2);
     padding: 1.8rem 2rem;
@@ -65,7 +77,7 @@ st.markdown("""
     color: #dbeafe;
 }
 
-/* ================= KPI CARDS ================= */
+/* KPI */
 [data-testid="metric-container"] {
     background: white;
     border-radius: 14px;
@@ -76,51 +88,105 @@ st.markdown("""
 }
 
 [data-testid="metric-container"]:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
-/* ================= INFO BOXES ================= */
+/* INFO BOX */
 div[data-testid="stInfo"] {
     border-radius: 12px;
     border: 1px solid #e5e7eb;
 }
 
-/* ================= GLOBAL ================= */
-body {
-    background-color: #f5f7fb;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# ── Page d'accueil ───────────────────────────────────────────────────
-st.markdown("""
-<div class="main-header">
-    <h1>🏨 Hôtel Dar Khayam</h1>
-    <p>Tableau de bord KPI — Sélectionnez un département dans la barre de navigation à gauche</p>
-</div>
-""", unsafe_allow_html=True)
-
-col1, col2, col3, col4, col5 = st.columns(5)
-
-with col1:
-    st.info("🛏️ **Hébergement**\n\nTaux d'occupation • ADR • RevPAR • Nuitées")
-with col2:
-    st.info("🍽️ **Restauration**\n\nFood cost, marge brute, CA F&B")
-with col3:
-    st.info("👥 **Ressources Humaines**\n\nMasse salariale, productivité, saisonnalité")
-with col4:
-    st.info("📈 **Chiffre d'affaires**\n\nCA global, évolution, analyse mensuelle")
-with col5:
-    st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts STEG/SONEDE")
-
-st.markdown("""
-<style>
+/* PAGE SPACING */
 div.block-container {
     padding-top: 1rem;
 }
+
 </style>
 """, unsafe_allow_html=True)
+
+# ─────────────────────────────────────────────
+# HEADER (HOME)
+# ─────────────────────────────────────────────
+st.markdown("""
+<div class="main-header">
+    <h1>🏨 Hôtel Dar Khayam</h1>
+    <p>Dashboard intelligent de performance hôtelière — Analyse KPI en temps réel</p>
+</div>
+""", unsafe_allow_html=True)
+
+# ─────────────────────────────────────────────
+# KPI DASHBOARD
+# ─────────────────────────────────────────────
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("🛏️ Occupation", "78%", "↑ 3%")
+
+with col2:
+    st.metric("💰 RevPAR", "142 TND", "↑ 5 TND")
+
+with col3:
+    st.metric("🍽️ CA F&B", "32K TND", "↓ 2%")
+
+with col4:
+    st.metric("⚡ Énergie", "8.4K TND", "↑ 1.2%")
+
+st.markdown("---")
+
+# ─────────────────────────────────────────────
+# MODULES DASHBOARD
+# ─────────────────────────────────────────────
+st.markdown("### 📊 Modules du système")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div style="
+        background:white;
+        padding:20px;
+        border-radius:12px;
+        border-left:5px solid #0D47A1;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    ">
+    🛏️ <b>Hébergement</b><br>
+    Occupation • ADR • RevPAR • Nuitées
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div style="
+        background:white;
+        padding:20px;
+        border-radius:12px;
+        border-left:5px solid #E65100;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    ">
+    🍽️ <b>Restauration</b><br>
+    CA F&B • Food Cost • Marges
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div style="
+        background:white;
+        padding:20px;
+        border-radius:12px;
+        border-left:5px solid #1B5E20;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    ">
+    ⚡ <b>Énergie</b><br>
+    Électricité • Eau • Gaz • STEG
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+# ─────────────────────────────────────────────
+# FOOTER
+# ─────────────────────────────────────────────
 st.caption("Projet de Fin d'Études — Dashboard KPI Informatisé | Hôtel Dar Khayam | 2024-2025")
-           
 
