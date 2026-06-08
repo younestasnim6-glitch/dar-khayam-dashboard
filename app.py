@@ -65,7 +65,8 @@ with col5:
     st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts STEG/SONEDE")
 
 st.markdown("---")
-st.caption("Projet de Fin d'Études — Dashboard KPI Informatisé | Hôtel Dar Khayam |)
+st.caption("Projet de Fin d'Études — Dashboard KPI Informatisé | Hôtel Dar Khayam | 2024-2025")
+
            
            
 
