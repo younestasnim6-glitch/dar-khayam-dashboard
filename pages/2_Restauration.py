@@ -34,15 +34,19 @@ st.markdown("""
 @st.cache_data
 def load_data():
     conn = mysql.connector.connect(
-        host="localhost", user="root",
-        password="Tasnimyns3*", database="hotel_dashboard"
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"],
+        port=int(st.secrets["mysql"]["port"]),
+        ssl_disabled=True
     )
+
     df = pd.read_sql("SELECT * FROM couts_fb", conn)
     conn.close()
     return df
 
 df = load_data()
-
 # ── KPI calculs ──────────────────────────────────────────────────────
 df["total_achats"]    = df["achats_nourriture"] + df["achats_boissons"]
 df["food_cost_%"]     = (df["achats_nourriture"] / df["chiffre_affaires"]) * 100
