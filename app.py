@@ -1,113 +1,117 @@
 import streamlit as st
 
+# ─────────────────────────────────────────────
+# CONFIGURATION PAGE
+# ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Dar Khayam — Dashboard",
+    page_title="Dar Khayam — Dashboard KPI",
     page_icon="🏨",
     layout="wide"
 )
 
-# ─────────────────────────────
-# CSS
-# ─────────────────────────────
-NAVBAR_CSS = """
+# ─────────────────────────────────────────────
+# STYLE GLOBAL
+# ─────────────────────────────────────────────
+st.markdown("""
 <style>
-[data-testid="stSidebar"],
-[data-testid="collapsedControl"],
-section[data-testid="stSidebarNav"] {
-    display: none !important;
-}
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #0f2744;
+    }
+    [data-testid="stSidebar"] * {
+        color: #e8f0fe !important;
+    }
 
-.main .block-container {
-    padding-top: 0 !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
-    max-width: 100% !important;
-}
+    /* Header */
+    .main-header {
+        background: linear-gradient(135deg, #0f2744 0%, #1a4a8a 100%);
+        padding: 1.5rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        color: white;
+    }
 
-/* Header */
-.dept-header {
-    background: linear-gradient(135deg, #0f2744 0%, #1a4a8a 100%);
-    padding: 1.2rem 2rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    margin-top: 1.2rem;
-}
+    .main-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: white !important;
+    }
 
-.dept-header h2 {
-    color: white !important;
-    margin: 0;
-    font-size: 1.5rem;
-}
+    .main-header p {
+        margin: 0.3rem 0 0;
+        color: #93b4d8;
+    }
 
-.dept-header p {
-    color: #93b4d8;
-    margin: 0.3rem 0 0;
-    font-size: 0.88rem;
-}
+    /* Info banner */
+    .info-banner {
+        background-color: #e8f0fe;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border-left: 5px solid #1a4a8a;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
 
-/* Metrics */
-[data-testid="metric-container"] {
-    background: #f8fafd;
-    border: 1px solid #e2eaf4;
-    border-radius: 10px;
-    padding: 16px !important;
-}
+    /* KPI cards */
+    [data-testid="metric-container"] {
+        background: #f8fafd;
+        border: 1px solid #e2eaf4;
+        border-radius: 10px;
+        padding: 16px !important;
+    }
 </style>
-"""
+""", unsafe_allow_html=True)
 
-st.markdown(NAVBAR_CSS, unsafe_allow_html=True)
+# ─────────────────────────────────────────────
+# HEADER
+# ─────────────────────────────────────────────
+st.markdown("""
+<div class="main-header">
+    <h1>🏨 Hôtel Dar Khayam</h1>
+    <p>Dashboard KPI — Analyse des performances globales de l’hôtel</p>
+</div>
+""", unsafe_allow_html=True)
 
-# ─────────────────────────────
-# NAVIGATION
-# ─────────────────────────────
-page = st.selectbox("Navigation", [
-    "Accueil",
-    "Hébergement",
-    "Restauration",
-    "Ressources humaines",
-    "Énergie"
-])
+# ─────────────────────────────────────────────
+# INFO (EN HAUT DE PAGE comme demandé)
+# ─────────────────────────────────────────────
+st.markdown("""
+<div class="info-banner">
+👉 Utilise le menu à gauche pour explorer les départements : Hébergement, Restauration, RH et Énergie
+</div>
+""", unsafe_allow_html=True)
 
-# ─────────────────────────────
-# ROUTING
-# ─────────────────────────────
-if page == "Accueil":
+# ─────────────────────────────────────────────
+# KPI GLOBAUX (SIMULÉS / EXEMPLE)
+# ─────────────────────────────────────────────
+col1, col2, col3, col4 = st.columns(4)
 
-    st.markdown("""
-    <div class="dept-header">
-        <h2>🏨 Hôtel Dar Khayam</h2>
-        <p>Tableau de bord KPI global — Sélectionnez un département</p>
-    </div>
-    """, unsafe_allow_html=True)
+col1.metric("💰 Chiffre d'affaires", "1 250 000 TND")
+col2.metric("🛏️ Taux d’occupation", "78 %")
+col3.metric("👥 Masse salariale", "420 000 TND")
+col4.metric("⚡ Coût énergie", "120 000 TND")
 
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.info("🛏️ **Hébergement**\n\nOccupation, ADR, RevPAR, nuitées")
-
-    with col2:
-        st.info("🍽️ **Restauration**\n\nFood cost, marge, CA F&B")
-
-    with col3:
-        st.info("👥 **Ressources humaines**\n\nMasse salariale, productivité")
-
-    with col4:
-        st.info("⚡ **Énergie**\n\nÉlectricité, eau, gaz, coûts")
-
-elif page == "Hébergement":
-    st.switch_page("pages/1_Hebergement.py")
-
-elif page == "Restauration":
-    st.switch_page("pages/2_Restauration.py")
-
-elif page == "Ressources humaines":
-    st.switch_page("pages/3_Ressources_Humaines.py")
-
-elif page == "Énergie":
-    st.switch_page("pages/4_Energie.py")
-
-# ─────────────────────────────
-# FOOTER
-# ─────────────────────────────
 st.markdown("---")
-st.caption("Projet de Fin d'Études — Dashboard KPI Hôtel Dar Khayam | 2024-2025")
+
+# ─────────────────────────────────────────────
+# CARDS DÉPARTEMENTS
+# ─────────────────────────────────────────────
+c1, c2, c3, c4 = st.columns(4)
+
+with c1:
+    st.info("🛏️ Hébergement\n\nRevPAR, ADR, occupation, nuitées")
+
+with c2:
+    st.info("🍽️ Restauration\n\nFood cost, marge brute, CA F&B")
+
+with c3:
+    st.info("👥 Ressources Humaines\n\nProductivité, masse salariale")
+
+with c4:
+    st.info("⚡ Énergie\n\nÉlectricité, eau, gaz, coûts STEG/SONEDE")
+
+# ─────────────────────────────────────────────
+# FOOTER
+# ─────────────────────────────────────────────
+st.markdown("---")
+st.caption("Projet PFE — Dashboard Intelligent Hôtelier | Dar Khayam | 2025")
