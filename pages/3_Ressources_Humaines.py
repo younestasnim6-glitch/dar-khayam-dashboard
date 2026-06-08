@@ -4,6 +4,10 @@ import mysql.connector
 import plotly.express as px
 
 st.set_page_config(page_title="Ressources Humaines — Dar Khayam", page_icon="👥", layout="wide")
+# ── 2. FONCTIONS UTILITAIRES ───────────────────
+def format_money(x):
+    return f"{x:,.2f}".replace(",", " ").replace(".", ",") + " DT"
+
 
 st.markdown("""
 <style>
