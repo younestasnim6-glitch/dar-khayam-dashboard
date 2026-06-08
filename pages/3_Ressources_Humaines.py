@@ -34,18 +34,23 @@ st.markdown("""
 @st.cache_data
 def load_data():
     conn = mysql.connector.connect(
-        host="localhost", user="root",
-        password="Tasnimyns3*", database="hotel_dashboard"
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"],
+        port=int(st.secrets["mysql"]["port"]),
+        ssl_disabled=True
     )
+
     df = pd.read_sql("SELECT * FROM rh_hotel_clean", conn)
     conn.close()
     return df
 
 df = load_data()
 
-df["chiffre_affaires"]  = pd.to_numeric(df["chiffre_affaires"])
-df["masse_salariale"]   = pd.to_numeric(df["masse_salariale"])
-df["nombre_effectifs"]  = pd.to_numeric(df["nombre_effectifs"])
+df["chiffre_affaires"] = pd.to_numeric(df["chiffre_affaires"], errors="coerce")
+df["masse_salariale"] = pd.to_numeric(df["masse_salariale"], errors="coerce")
+df["nombre_effectifs"] = pd.to_numeric(df["nombre_effectifs"], errors="coerce")
 
 # ── KPI calculs ──────────────────────────────────────────────────────
 df["productivite_par_employe"]    = df["chiffre_affaires"] / df["nombre_effectifs"]
