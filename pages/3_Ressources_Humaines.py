@@ -75,7 +75,12 @@ df_f = df[df["mois"].isin(mois) & df["saison"].isin(saisons)]
 
 # ── KPI cards ────────────────────────────────────────────────────────
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("💰 CA Total",           f"{df_f['chiffre_affaires'].sum():,.0f} DT")
+total_ca = df_f["chiffre_affaires"].sum()
+
+c1.metric(
+    "💰 Chiffre d'affaires",
+    f"{total_ca:,.0f}".replace(",", " ") + " DT"
+)
 c2.metric("💼 Masse salariale",    f"{df_f['masse_salariale'].sum():,.0f} DT")
 c3.metric("👤 Productivité moy.", f"{df_f['productivite_par_employe'].mean():,.2f} DT")
 c4.metric("📊 Coût salarial %",    f"{df_f['cout_salarial_pct'].mean():.2f} %")
