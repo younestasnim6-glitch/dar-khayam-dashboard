@@ -1,4 +1,5 @@
 import streamlit as st
+import mysql.connector
 
 st.set_page_config(
     page_title="Dar Khayam — Dashboard",
@@ -6,6 +7,24 @@ st.set_page_config(
     layout="wide"
 )
 
+@st.cache_resource
+def get_connection():
+    return mysql.connector.connect(
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"],
+        port=int(st.secrets["mysql"]["port"])
+    )
+
+try:
+    conn = get_connection()
+    cursor = conn.cursor()
+except Exception as e:
+    st.error("Erreur de connexion MySQL ❌")
+    st.stop()
+    
+    
 # ── CSS global partagé ──────────────────────────────────────────────
 st.markdown("""
 <style>
